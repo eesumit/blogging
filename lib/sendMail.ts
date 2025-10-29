@@ -39,7 +39,7 @@ export async function sendMail({ email, token }: MailOptions) {
 
     const info = await transporter.sendMail(mailOptions);
     console.log("✅ Mail sent:", info.response);
-  } catch (error) {
+  } catch (error:unknown) {
     console.error("❌ Error sending email:", error);
     throw new Error("Email not sent");
   }

@@ -45,7 +45,7 @@ export default function UploadPage() {
 
       const data = await res.json();
       setMediaUrl(data.url);
-    } catch (err) {
+    } catch (err:unknown) {
       setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setUploading(false);

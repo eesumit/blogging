@@ -11,7 +11,7 @@ try {
     api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
   });
-} catch (err) {
+} catch (err:unknown) {
   console.error("Cloudinary config error:", err);
 }
 
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     // Connect to DB
     try {
       await connectToDatabase();
-    } catch (dbErr) {
+    } catch (dbErr:unknown) {
       console.error("Database connection error:", dbErr);
       return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
     }
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     let formData: FormData;
     try {
       formData = await request.formData();
-    } catch (formErr) {
+    } catch (formErr:unknown) {
       console.error("Failed to parse form data:", formErr);
       return NextResponse.json({ error: "Invalid form data" }, { status: 400 });
     }
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       let bytes: ArrayBuffer;
       try {
         bytes = await image.arrayBuffer();
-      } catch (arrErr) {
+      } catch (arrErr:unknown) {
         console.error("Failed to read image buffer:", arrErr);
         return NextResponse.json({ error: "Failed to read image" }, { status: 400 });
       }
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
           stream.end(buffer);
         });
         cloudinaryImageUrl = result.secure_url;
-      } catch (error) {
+      } catch (error:unknown) {
         console.error("Cloudinary upload error:", error);
         return NextResponse.json({ error: "Image upload failed" }, { status: 500 });
       }
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
     let user;
     try {
       user = await User.findByIdAndUpdate(userId, body, { new: true }).select("-password");
-    } catch (updateErr) {
+    } catch (updateErr:unknown) {
       console.error("User update error:", updateErr);
       return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
     }
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
       message: "Profile updated successfully",
       user,
     });
-  } catch (error) {
+  } catch (error:unknown) {
     console.error("Unhandled error in profile update:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
             message: "Upload successful",
             url: (result as UploadApiResponse).secure_url,
         });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Database connection error:", error);
         return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
     }

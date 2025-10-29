@@ -62,7 +62,7 @@ function RegisterPage() {
       }
 
       router.push("/login");
-    } catch (err) {
+    } catch (err:unknown) {
       console.error(err);
       setError("Something went wrong. Please try again later.");
     }

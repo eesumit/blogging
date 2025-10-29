@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
             { message: "User registered successfully." },
             { status: 201 }
         )
-    } catch (error) {
+    } catch (error:unknown) {
         console.log("Error in registering user", error);
         return NextResponse.json(
             { error: "Failed to register userrrrrrrrrrr" },

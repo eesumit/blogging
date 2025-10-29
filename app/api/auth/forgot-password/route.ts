@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ message: "If an account exists, a link has been sent." }, { status: 200 });
 
-    } catch (error) {
+    } catch (error:unknown) {
         console.log("Error in sending the link, Error: ", error);
     }
 }

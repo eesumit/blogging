@@ -39,7 +39,7 @@ function ResetPassword() {
           setError(data.message || 'Password reset failed');
           return;
         }
-      } catch (err) {
+      } catch (err:unknown) {
         console.log("error in resetting the password. Error :",err)
         setError('An error occurred while resetting password');
         return;

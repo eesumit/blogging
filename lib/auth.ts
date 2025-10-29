@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
                         id: user._id.toString(),
                         email: user.email
                     }
-                } catch (error) {
+                } catch (error:unknown) {
                     console.log("Error in authenticating the user: ", error);
                     throw error;
                 }

@@ -22,7 +22,7 @@ export const handleUsernameCheck = async (value: string, setUsername: (username:
 
     setError(null); // clear previous error
     setUsername(value);
-  } catch (error) {
+  } catch (error:unknown) {
     console.error("Error checking username:", error);
     setError("An unexpected error occurred. Please try again later.");
   }

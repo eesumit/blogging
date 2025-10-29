@@ -38,7 +38,7 @@ export default function EditProfile() {
         videoRef.current.srcObject = stream;
         await videoRef.current.play();
       }
-    } catch (err) {
+    } catch (err:unknown) {
       console.error("Camera access denied:", err);
       setMessage("❌ Camera access denied: " + ((err as Error).message || "Unknown error"));
       setCameraOpen(false);

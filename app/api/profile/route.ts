@@ -36,7 +36,7 @@ export async function GET() {
     };
 
     return NextResponse.json(profile, { status: 200 });
-  } catch (error) {
+  } catch (error:unknown) {
     console.error("Error fetching profile:", error);
     return NextResponse.json(
       { error: "Failed to fetch profile" },

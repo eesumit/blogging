@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
         await connectToDatabase();
         const user = await User.findOne({ username });
         return NextResponse.json({ exists: !!user });
-    } catch (error) {
+    } catch (error:unknown) {
         console.error("Error checking username:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
