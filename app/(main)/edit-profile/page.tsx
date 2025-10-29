@@ -38,9 +38,9 @@ export default function EditProfile() {
         videoRef.current.srcObject = stream;
         await videoRef.current.play();
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Camera access denied:", err);
-      setMessage("❌ Camera access denied: " + (err.message || "Unknown error"));
+      setMessage("❌ Camera access denied: " + ((err as Error).message || "Unknown error"));
       setCameraOpen(false);
     }
   };
@@ -72,9 +72,9 @@ export default function EditProfile() {
           setMessage("❌ Failed to capture photo");
         }
       }, "image/jpeg");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error capturing photo:", err);
-      setMessage("❌ Error capturing photo: " + (err.message || "Unknown error"));
+      setMessage("❌ Error capturing photo: " + ((err as Error).message || "Unknown error"));
     } finally {
       // stop stream
       if (streamRef.current) {
@@ -98,15 +98,15 @@ export default function EditProfile() {
             console.log("Selected file:", fileOnLocal);
             setFile(fileOnLocal);
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error handling file selection:", err);
-          setMessage("❌ Error selecting file: " + (err.message || "Unknown error"));
+          setMessage("❌ Error selecting file: " + ((err as Error).message || "Unknown error"));
         }
       };
       input.click();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error creating file input:", err);
-      setMessage("❌ Error opening file picker: " + (err.message || "Unknown error"));
+      setMessage("❌ Error opening file picker: " + ((err as Error).message || "Unknown error"));
     }
   };
 
@@ -138,9 +138,9 @@ export default function EditProfile() {
 
       setMessage("✅ Profile updated successfully!");
       router.push("/profile"); // refresh page to reflect new data
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Submit error:", err);
-      setMessage("❌ Failed to update profile: " + (err.message || "Unknown error"));
+      setMessage("❌ Failed to update profile: " + ((err as Error).message || "Unknown error"));
     } finally {
       setLoading(false);
     }
@@ -157,14 +157,14 @@ export default function EditProfile() {
       debounceRef.current = setTimeout(() => {
         try {
           handleUsernameCheck(value, setUsername, setError);
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error in username check:", err);
-          setError("❌ Error checking username: " + (err.message || "Unknown error"));
+          setError("❌ Error checking username: " + ((err as Error).message || "Unknown error"));
         }
       }, 500);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error in handleUsernameChange:", err);
-      setError("❌ Error updating username: " + (err.message || "Unknown error"));
+      setError("❌ Error updating username: " + ((err as Error).message || "Unknown error"));
     }
   };
 
@@ -172,9 +172,9 @@ export default function EditProfile() {
     try {
       if (debounceRef.current) clearTimeout(debounceRef.current);
       handleUsernameCheck(username, setUsername, setError);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error in handleBlur:", err);
-      setError("❌ Error checking username: " + (err.message || "Unknown error"));
+      setError("❌ Error checking username: " + ((err as Error).message || "Unknown error"));
     }
   };
 
@@ -278,7 +278,7 @@ export default function EditProfile() {
                 try {
                   if (streamRef.current)
                     streamRef.current.getTracks().forEach((t) => t.stop());
-                } catch (err: any) {
+                } catch (err: unknown) {
                   console.error("Error stopping stream:", err);
                 } finally {
                   setCameraOpen(false);

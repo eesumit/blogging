@@ -14,7 +14,7 @@ function RegisterPage() {
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const { data: session, status } = useSession();
 
-  let debounceTimeout: NodeJS.Timeout;
+  // let debounceTimeout: NodeJS.Timeout;
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setUsername(value);
@@ -62,7 +62,7 @@ function RegisterPage() {
       }
 
       router.push("/login");
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
       setError("Something went wrong. Please try again later.");
     }

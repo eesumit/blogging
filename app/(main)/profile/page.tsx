@@ -6,6 +6,7 @@ import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import User from "@/models/User";
 import Post from "@/models/Post";
+import { ObjectId } from "mongoose";
 export const metadata = {
   title: "Blog | Profile",
   description: "User profile page",
@@ -46,7 +47,7 @@ export default async function Profile() {
     posts: user.posts || [],
   };
   const allPosts = await Promise.all(
-    profile.posts.map((postId) => Post.findById(postId))
+    profile.posts.map((postId:ObjectId) => Post.findById(postId))
   );
   
   return (
@@ -92,7 +93,7 @@ export default async function Profile() {
       <div>
         <h1 className="text-2xl font-bold py-5">Posts</h1>
         <div className="flex flex-wrap justify-start max-w-[768px] mx-auto ">
-          {allPosts?.map((post: any, i: number) => (
+          {allPosts?.map((post: { image: string }, i: number) => (
             <Image
               key={i}
               src={post.image}

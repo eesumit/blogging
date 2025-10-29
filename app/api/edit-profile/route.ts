@@ -77,13 +77,13 @@ export async function POST(request: NextRequest) {
           stream.end(buffer);
         });
         cloudinaryImageUrl = result.secure_url;
-      } catch (uploadErr: any) {
-        console.error("Cloudinary upload error:", uploadErr);
+      } catch (error) {
+        console.error("Cloudinary upload error:", error);
         return NextResponse.json({ error: "Image upload failed" }, { status: 500 });
       }
     }
 
-    const body: Record<string, any> = {
+    const body = {
       ...(name && { name }),
       ...(username && { username }),
       ...(bio && { bio }),
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
       message: "Profile updated successfully",
       user,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Unhandled error in profile update:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
