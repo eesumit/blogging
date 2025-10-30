@@ -5,15 +5,15 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request:NextRequest){
     try{
         const {password,token} = await request.json();
-        console.log("token is : "+token);
+        // console.log("token is : "+token);
         if(!password || !token){
             return NextResponse.json({error:"Invalid credentials."},{status:400});
         }
         await connectToDatabase();
         const existingUser = await User.findOne({resetToken:token});
-        console.log(existingUser);
+        // console.log(existingUser);
         if(!existingUser){
-            console.log("in existing user if")
+            // console.log("in existing user if")
             return NextResponse.json({message:"Error in resetting the password"},{status:500});
         }
         const isValidToken = token === existingUser.resetToken && existingUser.resetTokenExpiry > Date.now();

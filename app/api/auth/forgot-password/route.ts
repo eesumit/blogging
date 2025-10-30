@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         existingUser.resetToken = token;
         existingUser.resetTokenExpiry = expire;
         await existingUser.save();
-        console.log("User : ", existingUser);
+        // console.log("User : ", existingUser);
         //Sending email...
         const res = await sendMail({ email, token });
         console.log(res);

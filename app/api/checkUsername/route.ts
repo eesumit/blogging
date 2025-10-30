@@ -3,7 +3,7 @@ import { connectToDatabase } from "@/lib/db";
 import User from "@/models/User";
 
 export async function GET(request: NextRequest) {
-    console.log("Checking username...");
+    // console.log("Checking username...");
     const { searchParams } = new URL(request.url);
     const username = searchParams.get("username");
 

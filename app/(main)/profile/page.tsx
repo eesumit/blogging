@@ -7,8 +7,9 @@ import { connectToDatabase } from "@/lib/db";
 import User from "@/models/User";
 import Post from "@/models/Post";
 import { ObjectId } from "mongoose";
+
 export const metadata = {
-  title: "Blog | Profile",
+  title: "Social App | Profile",
   description: "User profile page",
 };
 
@@ -23,7 +24,6 @@ export default async function Profile() {
     );
   }
 
-  // ✅ Connect directly instead of fetch
   await connectToDatabase();
   const user = await User.findById(session.user.id);
 
@@ -46,43 +46,52 @@ export default async function Profile() {
     following: user.following?.length || 0,
     posts: user.posts || [],
   };
+
   const allPosts = await Promise.all(
-    profile.posts.map((postId:ObjectId) => Post.findById(postId))
+    profile.posts.map((postId: ObjectId) => Post.findById(postId))
   );
-  
+
   return (
-    <div className="min-w-full min-h-screen flex flex-col items-center justify-start pt-14 overflow-y-auto">
-      <div className="flex gap-2">
-        <div>
+    <div className="w-full min-h-screen flex flex-col items-center justify-start pt-14 px-4 sm:px-6 md:px-10 lg:px-20">
+      
+      {/* Profile Header */}
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-10 w-full max-w-4xl border-b border-border pb-6">
+        <div className="flex-shrink-0">
           <Image
             src={profile.avatar}
             alt="Profile"
             width={160}
             height={160}
-            className="rounded-full object-cover h-40 w-40 border-4 border-gray-300"
+            className="rounded-full object-cover h-28 w-28 sm:h-36 sm:w-36 md:h-40 md:w-40 border-4 border-gray-300"
           />
         </div>
-        <div className="flex flex-col items-start justify-center gap-3 px-5">
+
+        <div className="flex flex-col items-center sm:items-start justify-center gap-3 text-center sm:text-left">
           <span className="text-2xl font-bold">{profile.username}</span>
-          <span className="text-sm">{profile.name}</span>
-          <span className="flex gap-5">
-            <span className="flex gap-1 font-bold">
+          <span className="text-sm text-muted-foreground">{profile.name}</span>
+
+          <div className="flex gap-6 text-sm font-semibold">
+            <span className="flex gap-1">
               <span>{profile.posts?.length || 0}</span>
               <span>Posts</span>
             </span>
-            <span className="flex gap-1 font-bold">
+            <span className="flex gap-1">
               <span>{profile.followers}</span>
               <span>Followers</span>
             </span>
-            <span className="flex gap-1 font-bold">
+            <span className="flex gap-1">
               <span>{profile.following}</span>
               <span>Following</span>
             </span>
-          </span>
-          <span className="text-sm">{profile.bio}</span>
+          </div>
+
+          <p className="text-sm text-muted-foreground max-w-xs sm:max-w-md">
+            {profile.bio}
+          </p>
+
           <div>
             <Link href="/edit-profile">
-              <Button variant={"outline"} size={"sm"} className="cursor-pointer">
+              <Button variant="outline" size="sm" className="mt-2">
                 Edit Profile
               </Button>
             </Link>
@@ -90,20 +99,30 @@ export default async function Profile() {
         </div>
       </div>
 
-      <div>
-        <h1 className="text-2xl font-bold py-5">Posts</h1>
-        <div className="flex flex-wrap justify-start max-w-[768px] mx-auto ">
-          {allPosts?.map((post: { image: string }, i: number) => (
-            <Image
-              key={i}
-              src={post.image}
-              alt="Post"
-              width={256}
-              height={384}
-              className="object-cover h-96 w-64 border-2 border-white"
-            />
-          ))}
-        </div>
+      {/* Posts Section */}
+      <div className="w-full max-w-5xl mt-8">
+        <h1 className="text-2xl font-bold py-3 text-center sm:text-left">Posts</h1>
+        {allPosts.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-5 justify-items-center">
+            {allPosts?.map((post: { image: string }, i: number) => (
+              <div
+                key={i}
+                className="relative w-full max-w-[180px] sm:max-w-[220px] aspect-square overflow-hidden rounded-md shadow-sm"
+              >
+                <Image
+                  src={post.image}
+                  alt="Post"
+                  fill
+                  className="object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-muted-foreground mt-6">
+            No posts yet. Create your first post!
+          </p>
+        )}
       </div>
     </div>
   );

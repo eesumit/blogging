@@ -14,21 +14,15 @@ export default function Home() {
   const slides = [
     {
       bgImage: "bg-[url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80')]",
-      title: "Client Management App",
-      subtitle: "Welcome to Admin/user management App.",
+      title: "Life Chronicles App",
+      subtitle: "Welcome! Explore, share, and connect with your life's stories",
       color: "from-orange-500/20 to-red-500/20"
     },
     {
       bgImage: "bg-[url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80')]",
-      title: "Add/Update/Remove",
-      subtitle: "Add user based on role",
+      title: "Create-Post-Share-Like-Comment-Follow",
+      subtitle: "Share your thoughts, experiences, and memories",
       color: "from-green-500/20 to-teal-500/20"
-    },
-    {
-      bgImage: "bg-[url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80')]",
-      title: "Join the Community",
-      subtitle: "Connect with like-minded video enthusiasts",
-      color: "from-pink-500/20 to-rose-500/20"
     },
     {
       bgImage: "bg-[url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2940&q=80')]",
@@ -163,8 +157,8 @@ export default function Home() {
               </p>
               
               {/* Animated CTA Button on last slide */}
-              {index === slides.length - 1 && (
-                <div className='flex items-center justify-center gap-3'>
+          
+                <div className='flex items-center justify-center gap-3 mt-5'>
                   <Button 
                     className="cursor-pointer" 
                     variant={'outline'} 
@@ -188,7 +182,6 @@ export default function Home() {
                     Login
                   </Button>
                 </div>
-              )}
             </div>
           </div>
         </section>

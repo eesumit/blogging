@@ -13,8 +13,9 @@ const SideNavbar = () => {
     const path = usePathname();
   return (
     <div className='w-full h-full py-10'>
-        <div className='h-1/6 w-full bg-red-300 flex justify-center items-center text-7xl font-bold' >
-        Blog.
+        <div className='h-1/6 w-full flex justify-center items-center text-6xl font-bold flex-col bg-dark rounded-2xl shadow-2xl' >
+        <div>Sumit&apos;s</div>
+        <div className="text-sm">Life Chronicles App</div>
         </div>
         <nav>
             <ul className="flex flex-col justify-center py-10 gap-2">

@@ -65,7 +65,7 @@ export default function EditProfile() {
       ctx.drawImage(videoRef.current, 0, 0);
       canvas.toBlob((blob) => {
         if (blob) {
-          console.log("Captured blob:", blob);
+          // console.log("Captured blob:", blob);
           setFile(new File([blob], "capture.jpg", { type: "image/jpeg" }));
         } else {
           console.error("Canvas toBlob returned null");
@@ -95,7 +95,7 @@ export default function EditProfile() {
         try {
           const fileOnLocal = (e.target as HTMLInputElement).files?.[0];
           if (fileOnLocal) {
-            console.log("Selected file:", fileOnLocal);
+            // console.log("Selected file:", fileOnLocal);
             setFile(fileOnLocal);
           }
         } catch (err: unknown) {

@@ -6,7 +6,7 @@ interface MailOptions {
 }
 
 export async function sendMail({ email, token }: MailOptions) {
-  console.log("Inside sendmail and token is : "+token+" email is : "+email);
+  // console.log("Inside sendmail and token is : "+token+" email is : "+email);
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",

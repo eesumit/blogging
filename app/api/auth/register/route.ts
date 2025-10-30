@@ -17,14 +17,14 @@ export async function POST(request: NextRequest) {
         await connectToDatabase();
         console.log("Database connected.");
         const existingUser = await User.findOne({ email });
-        console.log("checking if user exist...");
+        // console.log("checking if user exist...");
         if (existingUser) {
-            console.log(existingUser);
+            // console.log(existingUser);
             return NextResponse.json(
                 { error: "User already registed. Please login" },
                 { status: 400 });
         }
-        console.log("creating user...");
+        // console.log("creating user...");
         //if user not found with related data, create new user, and return response.
         await User.create({ name, username, email, password });
         console.log("User registered successfully.");
