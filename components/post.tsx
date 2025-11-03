@@ -7,8 +7,10 @@ import ProfileImage from "@/public/images/profile.jpg"
 import { useEffect, useState } from "react";
 import { BiUpvote, BiSolidUpvote } from "react-icons/bi";
 export default function Post(props: IPost) {
-    const { user, title, description, image, createdAt, likes } = props;
+    const { user, title, description, image, createdAt } = props;
     const [postUser, setPostUser] = useState<IUser>();
+    // const [isLiked, setIsLiked] = useState<boolean>(false);
+    // const [isDisLiked, setIsDisLiked] = useState<boolean>(false);
 
     useEffect(() => {
         async function getUser() {
@@ -16,7 +18,7 @@ export default function Post(props: IPost) {
                 credentials: "include", // This includes cookies in the request
                 cache: "no-store" // Prevents caching
             });
-            console.log(res);
+            // console.log(res);
             const data = await res.json();
             setPostUser(data);
         }
@@ -27,14 +29,15 @@ export default function Post(props: IPost) {
         <>
             <div className="max-w-[900px] mx-auto mb-2">
                 <article
-                    className="flex gap-6 items-start bg-card/50 p-4 rounded-md border border-border"
+                    className="sm:flex gap-6 items-start bg-card/50 p-4 rounded-md border border-border transition-colors duration-300 hover:bg-accent"
                 >
-                    <div className="w-36 h-24 relative flex-shrink-0 rounded overflow-hidden bg-muted">
+                    <div className="w-full md:w-36 h-24 relative flex-shrink-0 rounded overflow-hidden bg-muted">
                         <Image
                             src={image ? image : PlaceholderImage}
                             alt="cover"
-                            fill
                             className="object-cover"
+                            fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, 33vw"
                         />
                     </div>
                     <div className="flex-1">
@@ -56,17 +59,17 @@ export default function Post(props: IPost) {
                                 />
                             </span>
                             <Link href={`/profile/${postUser?._id}`}>
-                                <span className="text-lg font-semibold">@{postUser?.username}
+                                <span className="text-sm md:text-lg font-semibold">@{postUser?.username}
                                 </span>
                             </Link>
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex-col gap-3">
                                 <span>
                                     created At : {new Date(createdAt || Date.now()).toLocaleString()}
                                 </span>
-                                <span className="flex items-center gap-1">
-                                    Upvote : {likes|| 0} <BiUpvote className="text-lg cursor-pointer" />
-                                     <BiUpvote className="text-lg cursor-pointer rotate-180" />
+                                <span className="flex items-center gap-1 opacity-30 cursor-not-allowed">
+                                    Upvote <BiUpvote className="text-lg " /> Downvote
+                                     <BiUpvote className="text-lg  rotate-180" />
                                 </span>
                             </div>
                         </div>
