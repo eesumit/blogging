@@ -51,11 +51,10 @@ const userSchema = new Schema<IUser>({
         type:Number,
         default:0,
     },
-    posts:{
-        type:[mongoose.Types.ObjectId],
-        ref:"Post",
-        default:[],
-    },
+    posts:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Post"
+    }],
     bio:{
         type:String,
         default:"",
@@ -79,5 +78,6 @@ userSchema.pre('save', async function(next){
     next();
 })
 
-const User = models.User || model<IUser>("User",userSchema);
+// Check if the model exists, if not create it
+const User = models?.User || model<IUser>("User", userSchema);
 export default User;

@@ -1,92 +1,119 @@
-import Image from "next/image";
-import Link from "next/link";
-
-type Post = {
-  id: string;
-  title: string;
-  excerpt: string;
-  author: string;
-  readTime: string;
-  cover?: string;
-};
-
-const samplePosts: Post[] = [
-  {
-    id: "1",
-    title: "How I built a small video blog with Next.js",
-    excerpt:
-      "A short write-up about the architecture, choices and lessons learned while building a small video sharing site.",
-    author: "Sumit Kumar",
-    readTime: "4 min",
-    cover: "/images/home-background-image.jpg",
-  },
-  {
-    id: "2",
-    title: "Designing for readable article pages",
-    excerpt:
-      "A quick guide to spacing, typography and contrast for long-form reading on the web.",
-    author: "Jane Doe",
-    readTime: "6 min",
-  },
-  {
-    id: "3",
-    title: "Optimizing images in Next.js",
-    excerpt: "How to use next/image, caching and a few gotchas when deploying.",
-    author: "Alex Smith",
-    readTime: "3 min",
-  },
-];
+'use client'
+import useSWR from 'swr';
+import Post from "@/components/post";
+import { IPost } from "@/models/Post";
+// Create a fetcher function for SWR
+const fetcher = (url: string) => 
+  fetch(url, { credentials: "include" }).then(res => res.json());
 
 export default function HomePage() {
+  // Use SWR for data fetching with caching
+  const url = `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/getAllPosts`;
+  // console.log("Home calling url is ",url);
+  const { data: posts, error, isLoading } = useSWR(
+    url, 
+    fetcher,
+    {
+      revalidateOnFocus: false, // Don't refetch when window regains focus
+      dedupingInterval: 60000, // Dedupe requests within 1 minute
+    }
+  );
   return (
-    <div className="min-w-full min-h-screen p-8">
-      <div className="max-w-[900px] mx-auto">
-        <header className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-extrabold">Discover</h1>
-          <Link
-            href="/create"
-            className="rounded-md border border-border px-3 py-1 text-sm hover:bg-accent/10"
-          >
-            Write
-          </Link>
-        </header>
-
-        <main className="space-y-6">
-          {samplePosts.map((post) => (
-            <article
-              key={post.id}
-              className="flex gap-6 items-start bg-card/50 p-4 rounded-md border border-border"
-            >
-              <div className="w-36 h-24 relative flex-shrink-0 rounded overflow-hidden bg-muted">
-                {/* {post.cover ? (
-                  <Image
-                    src={post.cover}
-                    alt="cover"
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-sm text-muted-foreground">No image</div>
-                )} */}
-              </div>
-
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold mb-1">{post.title}</h2>
-                <p className="text-sm text-muted-foreground mb-3">{post.excerpt}</p>
-                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <span>{post.author}</span>
-                  <span>•</span>
-                  <span>{post.readTime}</span>
-                  <span>•</span>
-                  <Link href={`/profile`} className="underline">
-                    View profile
-                  </Link>
-                </div>
-              </div>
-            </article>
-          ))}
-        </main>
-      </div>
+    <div>
+      <h1 className="text-center text-2xl font-bold py-3">Explore</h1>
+      {isLoading ? (
+        <div className="text-center py-10">Loading posts...</div>
+      ) : error ? (
+        <div className="text-center py-10 text-red-500">Error loading posts</div>
+      ) : posts && posts.length > 0 ? (
+        posts.slice().reverse().map((post: IPost) => (
+          <Post key={post._id?.toString() ?? ''} {...post} />
+        ))
+      ) : (
+        <div className="text-center py-10">No posts found</div>
+      )}
     </div>
   );
 }
+
+
+/*
+✅ Option 1: Fetch directly from the database (Best for server components)
+
+Since both are in the same app, you don’t need to hit your own /api/getAllPosts route from the server.
+Just import your model and query it directly:
+
+import { connectToDatabase } from "@/lib/db";
+import Post from "@/models/Post";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+
+export default async function HomePage() {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return <div>Please sign in first.</div>;
+  }
+
+  await connectToDatabase();
+  const posts = await Post.find({});
+
+  return (
+    <div>
+      {posts.map((post) => (
+        <div key={post._id}>{post.title}</div>
+      ))}
+    </div>
+  );
+}
+
+
+✅ Why this works
+
+You already have access to session via getServerSession().
+
+No need to go through middleware or /api route.
+
+Cleaner, faster, safer.
+
+✅ Option 2: Fetch from the client side (if you must use API route)
+
+If you need to hit /api/getAllPosts (e.g., for client rendering), then do the fetch on the client, not in a server component.
+
+Example:
+
+"use client";
+
+import { useEffect, useState } from "react";
+
+export default function HomePage() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const res = await fetch("/api/getAllPosts", {
+        credentials: "include"
+      });
+      const data = await res.json();
+      setPosts(data);
+    }
+    fetchPosts();
+  }, []);
+
+  return (
+    <div>
+      {posts.length ? (
+        posts.map((post) => <div key={post._id}>{post.title}</div>)
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  );
+}
+
+
+✅ Why this works
+
+The request is made from the browser, so cookies (NextAuth session tokens) are automatically attached.
+
+Middleware will see the valid token and let it through.
+ */
